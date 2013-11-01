@@ -1,1 +1,6 @@
 *.mat
+*.suo
+*.csproj.user
+*.DotSettings.user
+obj/
+bin/
