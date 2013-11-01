@@ -20,26 +20,19 @@ namespace Ex1
 		{
 			LoadData();
 			var theta = GradientDescent();
-
+			Console.WriteLine(theta);
 		}
 
-		private static DenseVector GradientDescent()
+		private static Vector<double> GradientDescent()
 		{
 			const int iterationCount = 1500;
 			const double alpha = 0.01;
-			var theta = new DenseVector(new double[] {0, 0});
+			Vector<double> theta = new DenseVector(new double[] {0, 0});
 			var costHistory = new List<double>(iterationCount);
 			for (int i = 0; i < iterationCount; i++)
-			{
-				var newTheta = new DenseVector(theta.Count);
-				for (int j = 0; j < theta.Count; j++)
-				{
-					var foo = (x*theta - y)*x.Column(j);
-					newTheta[j] = theta[j] - (alpha/y.Count)*foo;
-				}
-				theta = newTheta;
+			{				
+				theta = theta - (alpha/y.Count)*x.Transpose()*(x*theta - y);
 				costHistory.Add(ComputeCost(theta));
-				Console.WriteLine(costHistory.Last());
 			}
 			return theta;
 		}
@@ -58,10 +51,10 @@ namespace Ex1
 			}
 		}
 
-		private static double ComputeCost(DenseVector theta)
+		private static double ComputeCost(Vector<double> theta)
 		{
-			DenseVector diff = x*theta - y;
-			return diff.Sum(d => d*d) / (2 * x.RowCount);
+			return (x*theta - y).Sum(d => d*d)/(2*x.RowCount);
+
 		}
 	}
 }
