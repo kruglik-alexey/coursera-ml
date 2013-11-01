@@ -29,10 +29,13 @@ sigma = zeros(1, size(X, 2));
 
 
 
+mu = mean(X);
+sigma = std(X);
 
 
-
-
+muM = repmat(mu, size(X, 1), 1);
+sigmaM = repmat(sigma, size(X, 1), 1);
+X_norm = (X - muM) ./ sigmaM;
 
 % ============================================================
 
