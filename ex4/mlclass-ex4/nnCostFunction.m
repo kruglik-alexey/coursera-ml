@@ -62,22 +62,57 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+X = [ones(m, 1) X];
+k = num_labels;
+Theta1T = Theta1'; % 401x25
+Theta2T = Theta2'; % 26x10
+for i = 1:m
+	% Init x and y for i-th sample
+	yi = zeros(k, 1); % 10x1
+	yi(y(i)) = 1;
+	xi = X(i, :); % 1x401	
 
+    % Calculate values for 2-nd layer
+    a1 = xi;
+	z2 = a1 * Theta1T; % 1x25
+	a2 = sigmoid(z2); 
+	a2_1 = [ones(size(a2, 1), 1) a2]; % 1x26
 
+	% Calculate values for output layer
+	z3 = a2_1 * Theta2T; % 1x10
+	a3 = sigmoid(z3);	
+	h = a3;
+ 	hT = h'; % 10x1
 
+    % Calculate cost 
+	y1 = log(hT) .* yi;
+	y2 = log(1 - hT) .* (1 - yi);
+	Ji = sum(y1 + y2);
+	J = J + Ji;	
 
+	% Calculate deltas
+	d3 = hT - yi; % 10x1
 
+	% (25x10 * 10x1) .* 25x1 = 25x1
+	d2 = (Theta2T(2:end, :) * d3) .* (sigmoidGradient(z2))'; 
 
+	delta2 = d3 * a2_1; % 10x26
+	delta1 = d2 * a1; % 25x401	
 
+	% Accumulate deltas
+	Theta1_grad = Theta1_grad + delta1;
+	Theta2_grad = Theta2_grad + delta2;
+end
 
+% Scale results to learning set size
+J = -J / m;
+Theta1_grad = Theta1_grad / m;
+Theta2_grad = Theta2_grad / m;
 
-
-
-
-
-
-
-
+% Regularize
+Theta1Reg = Theta1(:,2:end).^2;
+Theta2Reg = Theta2(:,2:end).^2;
+J = J + lambda / 2 / m * (sum(Theta1Reg(:)) + sum(Theta2Reg(:))); 
 
 
 % -------------------------------------------------------------
