@@ -1,4 +1,4 @@
-*.mat
+ml_login_data.mat
 *.suo
 *.csproj.user
 *.DotSettings.user

@@ -114,6 +114,12 @@ Theta1Reg = Theta1(:,2:end).^2;
 Theta2Reg = Theta2(:,2:end).^2;
 J = J + lambda / 2 / m * (sum(Theta1Reg(:)) + sum(Theta2Reg(:))); 
 
+Theta1RegD = [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)];
+Theta2RegD = [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
+
+Theta1_grad = Theta1_grad + lambda / m * Theta1RegD;
+Theta2_grad = Theta2_grad + lambda / m * Theta2RegD;
+
 
 % -------------------------------------------------------------
 
